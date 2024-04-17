@@ -1,0 +1,241 @@
+@prefix : <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sgam: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/sgam#> .
+@prefix mimir: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir#> .
+@base <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+
+<http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir> rdf:type owl:Ontology .
+
+
+:SCL1 rdf:type owl:NamedIndividual ,
+              mimir:SCL ;
+      mimir:has :HeaderA ,
+                :SubstationA ,
+                :IEDA_1 ,
+                :IEDA_2 ;
+      mimir:name "SCL1" ;
+      rdfs:label "SCL1" .
+
+
+:SubstationA rdf:type owl:NamedIndividual ,
+                    mimir:Substation ;
+          mimir:has :VoltageLevelA;
+          mimir:name "AA1" ;
+          rdfs:label "SubstationA" .
+
+
+:VoltageLevelA rdf:type owl:NamedIndividual ,
+                        mimir:VoltageLevel ;
+               mimir:has :BayA ;
+               mimir:name "E1" ;
+               rdfs:label "VoltageLevelA" .
+
+
+:BayA rdf:type owl:NamedIndividual ,
+               mimir:Bay ; 
+      mimir:has :ConductingEquipmentA ,
+                :ConnectivityNode1 ;
+      mimir:name "Q01" ;
+      rdfs:label "BayA" .
+
+
+:ConductingEquipmentA rdf:type owl:NamedIndividual ,
+                               mimir:ConductingEquipment ;
+                      mimir:has :LNodeA , 
+                                :TerminalA ;
+                      mimir:name "ConductingEquipmentA" ;
+                      rdfs:label "ConductingEquipmentA" .
+
+                    
+:TerminalA rdf:type owl:NamedIndividual ,
+                    mimir:Terminal ;
+           mimir:subStationName "AA1" ;
+           mimir:voltageLevelName "E1" ;
+           mimir:bayName "Q01" ;
+           mimir:connectivityNode "ConnectivityNode1" ;
+           mimir:name "TerminalA" ;
+           rdfs:label "TerminalA" .
+
+
+:ConnectivityNode1 rdf:type owl:NamedIndividual ,
+                            mimir:ConnectivityNode ;
+                   mimir:name "ConnectivityNode1" ;
+                   rdfs:label "ConnectivityNode1" .
+
+
+:LNodeA rdf:type owl:NamedIndividual ,
+                 mimir:LNode ;
+        mimir:name "LNodeA" ;
+        mimir:iedName "AA1E1Q01A3" ;
+        mimir:lnClass "MMXU" ;
+        rdfs:label "LNodeA" .
+
+
+:HeaderA rdf:type owl:NamedIndividual ,
+                  mimir:Header ;
+         mimir:id "transmission" ;
+         mimir:revision "638466951687553883" ;
+         mimir:version "1" ;
+         mimir:toolID "ABB PCM600" ;
+         mimir:nameStructure "IEDName"@en ;
+         mimir:name "Header A"@en ;
+         rdfs:label "HeaderA"@en .
+
+
+:IEDA_1 rdf:type owl:NamedIndividual ,
+                 mimir:IED ;
+        mimir:name "AA1E1Q01A1" ;
+        mimir:desc "REF615" ;
+        mimir:has :AccessPointA_1 ;
+        mimir:type "REF615"@en ;
+        mimir:manufacturer "ABB" ;
+        mimir:configVersion "G" ;
+        rdfs:label "AA1E1Q01A2" . 
+          
+
+:AccessPointA_1 rdf:type owl:NamedIndividual ,
+                         mimir:AccessPoint ;
+                mimir:has :ServerA_1 ;
+                mimir:name "LD0" ;
+                rdfs:label "AccessPointA_1" .
+
+:ServerA_1 rdf:type owl:NamedIndividual ,
+                    mimir:Server ;
+           mimir:has :LDeviceA_1 ;
+           mimir:name "ServerA_1" ;
+           rdfs:label "ServerA_1" .
+
+
+:LDeviceA_1 rdf:type owl:NamedIndividual ,
+                     mimir:LDevice ;
+            mimir:has :LN0A_1 ,
+                      :LNA_1 ;
+            mimir:desc: "Protection" ;
+            mimir:inst "LD0" ;
+            mimir:name "LDeviceA_1" ;
+            rdfs:label "LDeviceA_1" .
+
+
+:LN0A_1 rdf:type owl:NamedIndividual ,
+                    mimir:LN0 ;
+          mimir:has :DataSetA_1 ;
+          mimir:inst "" ;
+          mimir:lnClass "LLN0" ;
+          mimir:desc: "Protection LLN0" ;
+          mimir:lnType "LLN0_REX61X_ED1_G3_6" ;
+          mimir:name "LN0A_1" ;
+          rdfs:label "LN0A_1" .
+
+
+:DataSetA_1 rdf:type owl:NamedIndividual ,
+                    mimir:DataSet ;
+          mimir:has :FCDAA_1 ;
+          mimir:name "StatIedA" ; 
+          rdfs:label "DataSetA_1" .
+
+
+:FCDAA_1 rdf:type owl:NamedIndividual ,
+                    mimir:FCDA ;
+          mimir:fc "ST" ;
+          mimir:ldInst "LD0" ;
+          mimir:lnInst "1" ;
+          mimir:lnClass "RDRE" ;
+          mimir:doName "RcdMade" ;
+          mimir:prefix "DRP2" ;
+          mimir:name "FCDAA_1" ;
+          rdfs:comment "Here is a link to an irrelevant dataset."@en ;
+          rdfs:label "FCDAA_1" .
+
+
+:LNA_1 rdf:type owl:NamedIndividual ,
+                    mimir:LN ;
+          mimir:has :DOIA_1 ;
+          mimir:inst "1"@en ;
+          mimir:lnClass "PTOC" ;
+          mimir:prefix "PT"@en ;
+          mimir:name "LNA_1" ;
+          rdfs:label "LNA_1" .
+
+
+:DOIA_1 rdf:type owl:NamedIndividual ,
+                    mimir:DOI ;
+          mimir:name "DOIA_1" ;
+          mimir:desc "Physical device name plate" ;
+          rdfs:label "PhyNam" .
+
+
+:IEDA_2 rdf:type owl:NamedIndividual ,
+                    mimir:IED ;
+          mimir:has :AccessPointA_2 ;
+          mimir:name "AA1E1Q01A3" ;
+          mimir:desc "REU615" ;
+          mimir:type "REU615" ;
+          mimir:manufacturer "ABB" ;
+          mimir:configVersion "G" ;
+          rdfs:label "AA1E1Q01A3" .
+
+
+:AccessPointA_2 rdf:type owl:NamedIndividual ,
+                    mimir:AccessPoint ;
+          mimir:has :ServerA_2 ;
+          mimir:name "AccessPointA_2" ;
+          rdfs:label "LD0" .
+
+
+:ServerA_2 rdf:type owl:NamedIndividual ,
+                    mimir:Server ;
+          mimir:has :LDeviceA_2 ;
+          mimir:name "ServerA_2" ;
+          rdfs:label "ServerA_2" .
+
+
+:LDeviceA_2 rdf:type owl:NamedIndividual ,
+                    mimir:LDevice ;
+          mimir:has :LN0A_2 ,
+                    :LNA_2 ;
+          mimir:inst "LD0" ;
+          mimir:desc "Protection" ;
+          mimir:name "LDeviceA_2" ;
+          rdfs:label "LDeviceA_2" .
+
+
+:LN0A_2 rdf:type owl:NamedIndividual ,
+                    mimir:LN0 ;
+          mimir:has :DataSetA_2 ;
+          mimir:desc "Protection LLN0" ;
+          mimir:lnClass "MMXU" ;
+          mimir:inst "" ;
+          mimir:lnType "LLN0_REX61X_ED1_G3_6" ;
+          mimir:name "LN0A_2" ;
+          rdfs:label "LN0A_2" .
+
+:DataSetA_2 rdf:type owl:NamedIndividual ,
+                    mimir:DataSet ;
+          mimir:has :FCDAA_2 ;
+          mimir:name "DataSetA_2" ;
+          rdfs:label "StatIed" .
+
+
+:FCDAA_2 rdf:type owl:NamedIndividual ,
+                    mimir:FCDA ;  
+          mimir:fc "ST" ;
+          mimir:ldInst "LD0" ;
+          mimir:lnInst "1" ;
+          mimir:lnClass "MMXU" ;
+          mimir:doName "Meas" ;
+          rdfs:comment "Link to another dataset will appear here."@en ;
+          mimir:name "FCDAA_2" ;
+          rdfs:label "FCDAA_2" .
+
+  
+:LNA_2 rdf:type owl:NamedIndividual ,
+                    mimir:LN ;
+          mimir:inst "1"@en ;
+          mimir:lnClass "TVTR" ;
+          mimir:prefix "PT"@en ;
+          mimir:name "LNA_2" ;
+          rdfs:label "LNA_2" .

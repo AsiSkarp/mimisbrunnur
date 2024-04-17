@@ -1,0 +1,269 @@
+@prefix : <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sgam: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/sgam#> .
+@prefix mimir: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir#> .
+@base <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+
+<http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir> rdf:type owl:Ontology .
+
+
+:SCLB rdf:type owl:NamedIndividual ,
+               mimir:SCL ;
+      mimir:has :HeaderB ,
+                :SubstationB ,
+                :IEDB_1 ,
+                :IEDB_2 ;
+      mimir:name "SCLB" ;
+      rdfs:label "SCL2" .
+
+
+:HeaderB rdf:type owl:NamedIndividual ,
+                  mimir:Header ;
+         mimir:has :HistoryB ;
+         mimir:id "Distribution" ;
+         mimir:nameStructure "IEDName"@en ;
+         mimir:version "2" ;
+         mimir:revision "0" ;
+         mimir:toolID "CET850 v2.0" ;
+         mimir:name "HeaderB"@en ;
+         rdfs:label "HeaderB" .
+
+
+:HistoryB rdf:type owl:NamedIndividual ,
+                   mimir:History ;
+          mimir:has :HitemB ;
+          mimir:name "HistoryB" ;
+          rdfs:label "HistoryB" .
+
+
+:HitemB rdf:type owl:NamedIndividual ,
+                 mimir:Hitem ;
+        mimir:revision "1" ;
+        mimir:version "V1" ; 
+        mimir:what "Created"@en ;
+        mimir:when "2024-03-22"@en ;
+        mimir:who "CET850Config"@en ;
+        mimir:name "HitemB" ;
+        rdfs:label "HitemB" .
+
+
+:SubstationB rdf:type owl:NamedIndividual ,
+                      mimir:Substation ;
+             mimir:has :VoltageLevelB ;
+             mimir:name "SchneiderDistStation" ;
+             mimir:desc "" ;
+             rdfs:label "SubstationB" .
+
+
+:VoltageLevelB rdf:type owl:NamedIndividual ,
+                        mimir:VoltageLevel ;
+               mimir:has :BayB ;
+               mimir:name "ne-VL" ;
+              rdfs:label "VoltageLevelB" .
+
+
+:BayB rdf:type owl:NamedIndividual ,
+               mimir:Bay ;
+      mimir:has :ConductingEquipmentB ,
+                :ConnectivityNode2 ;
+      mimir:name "ne20p" ;
+      mimir:desc "Bay" ;
+      rdfs:label "Distribution Bay" .
+
+
+:ConductingEquipmentB rdf:type owl:NamedIndividual ,
+                               mimir:ConductingEquipment ;
+                      mimir:has :LNodeB ,
+                                :TerminalB ;
+                      mimir:name "ConductingEquipmentB" ;
+                      rdfs:label "ConductingEquipmentB" .
+
+
+:TerminalB rdf:type owl:NamedIndividual ,
+                    mimir:Terminal ;
+           mimir:subStationName "SchneiderDistStation" ;
+           mimir:voltageLevelName "ne-VL" ;
+           mimir:bayName "ne20p" ;
+           mimir:connectivityNode "ConnectivityNode2" ;         
+           mimir:name "TerminalB" ;
+           rdfs:label "TerminalB" .
+
+
+:ConnectivityNode2 rdf:type owl:NamedIndividual ,
+                            mimir:ConnectivityNode ;
+                   mimir:name "ConnectivityNode2" ;
+                   rdfs:label "CN2" .
+      
+
+:LNodeB rdf:type owl:NamedIndividual ,
+                 mimir:LNode ;
+        mimir:name "LNodeB" ;
+        mimir:iedName "IEDB_1" ;
+        mimir:lnClass "MMXU" ;
+        rdfs:label "LNodeB" .
+
+
+:IEDB_1 rdf:type owl:NamedIndividual ,
+                 mimir:IED ;
+        mimir:has :AccessPointB_1 ;
+        mimir:configVersion "7.0" ;
+        mimir:desc "Substation" ;
+        mimir:manufacturer "Schneider Electric" ;
+        mimir:name "IEDB_1" ;
+        mimir:type "Sepam S82"@en ;
+        rdfs:label "DistSubStation" .
+
+
+:AccessPointB_1 rdf:type owl:NamedIndividual ,
+                         mimir:AccessPoint ;
+                mimir:has :ServerB_1 ;
+                mimir:name "AccessPointB_1" ;
+                mimir:desc "IEC61850 Interface" ;
+                rdfs:label "AP1" .
+
+
+:ServerB_1 rdf:type owl:NamedIndividual ,
+                    mimir:Server ;
+           mimir:has :LDeviceB_1 ;
+           mimir:name "ServerB_1" ;
+           rdfs:label "ServerB_1" .
+
+
+:LDeviceB_1 rdf:type owl:NamedIndividual ,
+                     mimir:LDevice ;
+            mimir:has :LN0B_1 ,
+                      :LNB_1 ;
+            mimir:inst "Relay"@en ;
+            mimir:name "LDeviceB_1" ;
+            rdfs:label "LDeviceB_1" .
+
+
+:LN0B_1 rdf:type owl:NamedIndividual ,
+                 mimir:LN0 ;
+        mimir:has :DataSetB_1 ;
+        mimir:lnType "SE_LLN0_EasergyP5_V003" ;
+        mimir:inst "" ;
+        mimir:lnClass "MMXU" ;
+        mimir:name "MMXUB_1" ;
+        rdfs:label "MMXUB_1" .
+
+
+:DataSetB_1 rdf:type owl:NamedIndividual ,
+                     mimir:DataSet ;
+            mimir:has :FCDAB_1 ;
+            mimir:name "DataSetB_1" ;
+            rdfs:label "DS_B" .
+
+
+:FCDAB_1 rdf:type owl:NamedIndividual ,
+                  mimir:FCDA ;
+         mimir:fc "ST" ;
+         mimir:ldInst "Relay" ;
+         mimir:lnInst "1" ;
+         mimir:lnClass "MMXU" ;
+         mimir:doName "PhyHealth" ;
+         rdfs:comment "Link to another dataset will appear here."@en ;
+         mimir:name "FCDAB_1" ;
+         rdfs:label "FCDAB_1" .
+
+
+:LNB_1 rdf:type owl:NamedIndividual ,
+                mimir:LN ;
+       mimir:has :DOIB_1 ;
+       mimir:lnType "SE_GGIO_AR_EasergyP5FUW_V002" ;
+       mimir:inst "1"@en ;
+       mimir:lnClass "GGIO" ;
+       mimir:prefix "P5AR"@en ;
+       mimir:name "LNB_1" ;
+       rdfs:label "LNB_1" .
+
+
+:DOIB_1 rdf:type owl:NamedIndividual ,
+                 mimir:DOI ;
+        mimir:name "DOIB_1" ;
+        mimir:desc "ctlModel" ;
+        rdfs:label "Mod" .
+
+
+:IEDB_2 rdf:type owl:NamedIndividual ,
+                 mimir:IED ;
+        mimir:has :AccessPointB_2 ;
+        mimir:name "IEDB_2" ;
+        mimir:type "Easergy P5"@en ;
+        mimir:manufacturer "Schneider Electric" ;
+        mimir:configVersion "V01.401" ;
+        rdfs:label "SchneiderElectric_EasergyP5_001" .
+
+
+:AccessPointB_2 rdf:type owl:NamedIndividual ,
+                         mimir:AccessPoint ;
+                mimir:has :ServerB_2 ;
+                mimir:name "AccessPointB_2" ;
+                mimir:desc "IEC61850 Interface" ;
+                rdfs:label "AP2" .
+
+
+:ServerB_2 rdf:type owl:NamedIndividual ,
+                    mimir:Server ;
+           mimir:has :LDeviceB_2 ;
+           mimir:name "ServerB_2" ;
+           rdfs:label "ServerB_2" .
+
+
+:LDeviceB_2 rdf:type owl:NamedIndividual ,
+                     mimir:LDevice ;
+            mimir:has :LN0B_2 ,
+                      :LNB_2 ;
+            mimir:inst "Relay"@en ;
+            mimir:name "LDeviceB_2" ;
+            rdfs:label "LDeviceB_2" .
+
+
+:LN0B_2 rdf:type owl:NamedIndividual ,
+                 mimir:LN0 ;
+        mimir:has :DataSetB_2 ;
+        mimir:lnType "SE_LLN0_EasergyP5_V003" ;
+        mimir:inst "" ;
+        mimir:lnClass "LLN0" ;
+        mimir:name "LN0B_2" ;
+        rdfs:label "LN0B_2" .
+
+
+:DataSetB_2 rdf:type owl:NamedIndividual ,
+                     mimir:DataSet ;
+            mimir:has :FCDAB_2 ;
+            mimir:name "DataSetB_2" ;
+            rdfs:label "DS_B" .
+
+
+:FCDAB_2 rdf:type owl:NamedIndividual ,
+                  mimir:FCDA ;
+          #mimir:fc "ST" ;
+          #mimir:ldInst "Relay" ;
+         mimir:lnInst "1" ;
+         mimir:lnClass "LPHD" ;
+         rdfs:comment "Link to another dataset will appear here."@en ;
+         mimir:name "FCDAB_2" ;
+         rdfs:label "FCDAB_2" .
+
+
+:LNB_2 rdf:type owl:NamedIndividual ,
+                mimir:LN ;
+       mimir:has :DOIB_2 ;
+       mimir:lnType "SE_MMXU_SCV_EasergyP5FV_V002" ;
+       mimir:lnClass "LPHD" ;
+       mimir:prefix "P5SCUY"@en ;
+       mimir:inst "1"@en ;
+       mimir:name "LNB_2" ;
+       rdfs:label "LNB_2" .
+
+
+:DOIB_2 rdf:type owl:NamedIndividual ,
+                 mimir:DOI ;
+        mimir:name "DOIB_2" ;
+        mimir:desc "ctlModel" ;
+        rdfs:label "Mod" .

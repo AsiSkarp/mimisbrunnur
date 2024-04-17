@@ -1,0 +1,90 @@
+@prefix : <http://iec.ch/TC57/CIM-generic#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix cim:  <http://iec.ch/TC57/CIM-generic#> .
+@prefix uml: <http://langdale.com.au/2005/UML#> .
+@prefix mimir: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+@prefix scl: <http://iec.ch/TC57/61850-7-4#> .
+
+@base <http://iec.ch/TC57/CIM-generic#> .
+
+
+:ACLineSegment1 rdf:type owl:NamedIndividual, 
+                            cim:ACLineSegment ;
+                    cim:IdentifiedObject.name "Segment 1" ;
+                    cim:ConductingEquipment.BaseVoltage  :BaseVoltage1 ;
+                    cim:ConductingEquipment.Terminal  :Terminal1 ;
+                    cim:ConductingEquipment.Terminal  :Terminal2 ;
+                    cim:ConductingEquipment.length 1.0 ;
+                    cim:ACLineSegment.r 0.05 ;
+                    cim:ACLineSegment.x 0.01 ;
+                    uml:id "d1cc59ad-d816-4f32-9d9f-db55f7a0c67f" ;
+                    rdfs:label "AC Line Segment 1" .
+
+
+:BaseVoltage1 rdf:type owl:NamedIndividual ,
+                          cim:BaseVoltage ;
+                    cim:IdentifiedObject.name "Base Voltage 1" ;
+                    cim:BaseVoltage.nominalVoltage 110.0 ;
+                    rdfs:label "Base Voltage 1" .
+
+
+:Terminal1 rdf:type owl:NamedIndividual ,
+                       cim:Terminal ;
+                    cim:IdentifiedObject.name "Terminal 1" ;
+                    cim:Terminal.ConnectivityNode  :ConnectivityNode1 ;
+                    cim:PowerSystemResource.Measurements  :Analog1 ;
+                    #cim:Terminal.ConnectedTo  mimir:ConnectivityNode1 ;
+                    rdfs:label "Terminal 1" .
+
+
+:Terminal2 rdf:type owl:NamedIndividual ,
+                       cim:Terminal ;
+                    cim:IdentifiedObject.name "Terminal 2" ;
+                    cim:Terminal.ConnectivityNode  :ConnectivityNode2 ;
+                    cim:PowerSystemResource.Measurements  :Analog2 ;
+                    #cim:Terminal.ConnectedTo  mimir:ConnectivityNode2 ;
+                    rdfs:label "Terminal 2" .
+
+
+:ConnectivityNode1 rdf:type owl:NamedIndividual ,
+                            cim:ConnectivityNode ;
+                    cim:IdentifiedObject.name "Connectivity Node 1" ;
+                    rdfs:label "Connectivity Node 1" .
+
+
+:ConnectivityNode2 rdf:type owl:NamedIndividual ,
+                            cim:ConnectivityNode ;
+                    cim:IdentifiedObject.name "Connectivity Node 2" ;
+                    rdfs:label "Connectivity Node 2" .
+
+
+:Analog1 rdf:type owl:NamedIndividual ,
+                          cim:Analog ;
+                    cim:IdentifiedObject.name "Measurement 1" ;
+                    cim:Measurement.phases "ABC" ;
+                    cim:Measurement.unitSymbol "VA" ;
+                    #cim:Measurement.Terminal  :Terminal1 ;
+                    uml:id "60c48ecf-5e45-462b-829f-7ab5acaa1512" ;
+                    :connectedSubstation 'SCL1',
+                    rdfs:label "Measurement 1" .
+
+
+:Analog2 rdf:type owl:NamedIndividual ,
+                          cim:Analog ;
+                    cim:IdentifiedObject.name "Measurement 2" ;
+                    cim:Measurement.phases "ABC" ;
+                    cim:Measurement.unitSymbol "VA" ;
+                    #cim:Measurement.Terminal  :Terminal2 ;
+                    uml:id "3fb127e0-f19e-483f-9652-61c3162e1bcd" ;
+                    :connectedSubstation 'SCL2',
+                    rdfs:label "Measurement 2" .
+
+
+
+
+
+
+
+

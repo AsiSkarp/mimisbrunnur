@@ -1,0 +1,41 @@
+#version: '3'
+services:
+  neo4j:
+    image: neo4j:4.4.0
+    container_name: neo4j
+    environment:
+      - NEO4J_AUTH=neo4j/test
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_PLUGINS='["apoc","n10s"]'
+      - NEO4j_dbms_allow_upgrade=true
+      - NEO4J_dbms_allow_format_migration=true
+    ulimits:
+      nofile:
+        soft: 40000
+        hard: 40000
+    ports:
+      - 7474:7474
+      - 7687:7687
+    volumes:
+      - ./neo4j/conf:/var/lib/neo4j/conf
+      - ./neo4j/plugins:/var/lib/neo4j/plugins
+      - ./neo4j/data:/data/mimir
+      - neo4j_data:/data
+
+  dashboard:
+    build: . 
+    ports:
+      - 8080:80
+    depends_on:
+      - neo4j
+
+networks:
+  mimirnet:
+      
+volumes:
+  neo4j_data:
+  dashboard_data:
+  es_data:
+
