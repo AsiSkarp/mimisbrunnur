@@ -83,7 +83,6 @@
 
         .catalog-container {
             display: flex;
-            /*flex-direction: column;*/
         }
 
         #last-query {
@@ -95,11 +94,6 @@
             height: 600px;
             width: 100%; 
         }
-
-        /*#ds {
-            display: inline-block;
-            border: 3px solid #ccc;
-        }*/
 
     </style>
 </head>
@@ -220,23 +214,33 @@
                 );
                 displayLastQuery(query);
                 for (let i = 0; i < records[0].get('vertices').length; i++) {
-                    console.log("Relation");
-                    console.log(records[0].get('r')[i]);
-                    console.log("Nodes");
+                    var sBarDiv = document.getElementById('s-bar');
+                    var elemId = records[0].get('vertices')[i].elementId;
                     var props = records[0].get('vertices')[i].properties;
                     var contDiv = document.createElement('div');
                     contDiv.style.border = '3px solid #ccc';
                     contDiv.style.padding = '10px';
                     for (var key in props) {
                         var keyDiv = document.createElement('div');
-                        keyDiv.innerHTML = (props[key].includes("://")) 
+                        keyDiv.innerHTML = (key == 'uri') 
                             ? keyDiv.innerHTML = `<b>${key}:</b> <a href='${props[key]}'><b>${props[key]}</b></a>`
-                            : keyDiv.innerHTML = `<b>${key}:</b> ${props[key]}`;
+                            : keyDiv.innerHTML = `<b>${key}:</b> ${props[key]}`; 
                         contDiv.appendChild(keyDiv);
                     }
-                    document.getElementById('s-bar').appendChild(contDiv);
+                    sBarDiv.appendChild(contDiv);
+                    
+                    for (let id of records[0].get('r')) {
+                        if (id.endNodeElementId == elemId) {
+                            var relDiv = document.createElement('div');
+                            relDiv.style.border = '3px solid #ccc';
+                            relDiv.style.padding = '10px';
+                            relDiv.style.backgroundColor = '#fae0e0';
+                            relDiv.innerHTML = `<b>Relation:</b> ${id.type}`;
+                            sBarDiv.appendChild(relDiv);
+                        }
+                    }
+
                 }
-                
             }
             catch (error) {
                 console.error("Failed to fetch location:", error);
@@ -345,7 +349,10 @@
 
         async function getDataSetInfo(id) {
             const session = driver.session();
-            var catDiv = document.querySelector('.catalog-datasets');
+            var dInfoDiv = document.getElementById('d-info');
+            while (dInfoDiv.firstChild) {
+                dInfoDiv.removeChild(dInfoDiv.firstChild);
+            }
             try {
                 var query = 'MATCH (ds:Dataset)-[r]->(n) WHERE ID(ds) = $nodeID RETURN ds, r, n';
                 const { records, summary, keys } = await driver.executeQuery(
@@ -358,14 +365,11 @@
                     predicate = record.get('r').type;
 
                     if (predicate == 'distribution' || predicate == 'DISTRIBUTION') {
-
                         var distributionDiv = document.createElement('div');
                         distributionDiv.style.border = '3px solid #ccc';
                         distributionDiv.style.padding = '10px';
-                        var dist = document.createElement('p');
-                        dist.innerHTML = `<b>Distribution:</b>`;
                         var title = document.createElement('p');
-                        title.innerHTML = `<b>${object.title}</b>`;
+                        title.innerHTML = `<b>Distribution:</b>: ${object.title}`;
                         distributionDiv.appendChild(title);
                         var format = document.createElement('p');
                         format.innerHTML = `<b>Format:</b> ${object.format}`;

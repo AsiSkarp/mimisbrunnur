@@ -1,5 +1,6 @@
 neo4j/data/catalog.ttl
 neo4j/data/data_shacl.ttl
+neo4j/
 neo4j/data/databases/
 neo4j/data/dbms/
 neo4j/data/server_id
