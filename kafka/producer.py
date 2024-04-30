@@ -5,13 +5,13 @@ from kafka import KafkaProducer
 from datetime import datetime, timedelta
 
 KAFKA_BROKER = "kafka:9092"
-TOPIC_NAME = "measurements"
+TOPIC_NAME_A = "MMXU1"
+TOPIC_NAME_B = "MMXU2"
 
-# producer = KafkaProducer(
-#    bootstrap_servers=KAFKA_BROKER,
-#    value_serializer=lambda v: json.dumps(v).encode("utf-8"),
-# )
-
+producer = KafkaProducer(
+    bootstrap_servers=KAFKA_BROKER,
+    value_serializer=lambda v: json.dumps(v).encode("utf-8"),
+)
 
 def simulate_measurement(base_value, variation):
     return round(base_value + random.uniform(-variation, variation), 2)
@@ -92,10 +92,12 @@ def generate_message():
 
 
 def main():
+    print("Producing messages...")
     for _ in range(1000):
-        message = generate_message()
-        print(message)
-        # producer.send(TOPIC_NAME, value=message)
+        message1 = generate_message()
+        message2 = generate_message()
+        producer.send(TOPIC_NAME_A, value=message1)
+        producer.send(TOPIC_NAME_B, value=message2)
         time.sleep(1)
 
 
