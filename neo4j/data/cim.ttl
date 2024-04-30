@@ -228,7 +228,6 @@ uml:uriHasPrefix rdf:type owl:AnnotationProperty .
                 rdfs:label "Classification" ;
                 owl:equivalentClass xsd:integer .
 
-
 ###  http://iec.ch/TC57/CIM-generic#Conductance
 :Conductance rdf:type rdfs:Datatype ;
              uml:hasUnits "S" ;
@@ -845,13 +844,13 @@ xsd:time rdf:type rdfs:Datatype .
                           rdfs:label "Measurements" .
 
 
-# ### http://iec.ch/TC57/CIM-generic#Measurement.Locations
-# :Measurement.Locations rdf:type owl:ObjectProperty ;
-#                        owl:inverseOf :Location.Measurements ;
-#                        rdfs:domain :Measurement ;
-#                        rdfs:range :Location ;
-#                        rdfs:comment "The location of this measurement." ;
-#                        rdfs:label "Locations" .
+### http://iec.ch/TC57/CIM-generic#Measurement.Locations
+:Measurement.Locations rdf:type owl:ObjectProperty ;
+                       owl:inverseOf :Location.Measurements ;
+                       rdfs:domain :Measurement ;
+                       rdfs:range :Location ;
+                       rdfs:comment "The location of this measurement." ;
+                       rdfs:label "Locations" .
 
 
 # ### http://iec.ch/TC57/CIM-generic#Measurement.Asset
@@ -1263,6 +1262,36 @@ For CIMXML data files in RDF syntax conforming to IEC 61970-552, the mRID is map
                        uml:id "_870F033B-EDA6-4a32-A5AD-47DCBBFE2997" ;
                        rdfs:comment "The name is any free human readable and possibly non unique text naming the object." ;
                        rdfs:label "name" .
+
+
+### http://iec.ch/TC57/CIM-generic#Location.address
+:Location.address rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain :Location ;
+                 rdfs:range xsd:string ;
+                 #uml:id "_D3A3D3A3-3A3A-3A3A-3A3A-3A3A3A3A3A3A" ;
+                 rdfs:comment "The address of the location." ;
+                 rdfs:label "address" . 
+
+
+### http://iec.ch/TC57/CIM-generic#Location.xPosition
+:Location.xPosition rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain :Location ;
+                  rdfs:range xsd:string ;
+                  #uml:id "_D3A3D3A3-3A3A-3A3A-3A3A-3A3A3A3A3A3B" ;
+                  rdfs:comment "The x-coordinate of the point in the coordinate system specified by the associated PositionPoint." ;
+                  rdfs:label "xPosition" .
+
+
+### http://iec.ch/TC57/CIM-generic#Location.yPosition
+:Location.yPosition rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain :Location ;
+                  rdfs:range xsd:string ;
+                  #uml:id "_D3A3D3A3-3A3A-3A3A-3A3A-3A3A3A3A3A3C" ;
+                  rdfs:comment "The y-coordinate of the point in the coordinate system specified by the associated PositionPoint." ;
+                  rdfs:label "yPosition" .
 
 
 ### http://iec.ch/TC57/CIM-generic#Measurement.measurementType
@@ -1695,6 +1724,14 @@ The limit applies to all equipment and nodes contained in a given VoltageLevel. 
       rdfs:label "Line" .
 
 
+### http://iec.ch/TC57/CIM-generic#Location
+:Location rdf:type owl:Class ;
+         rdfs:subClassOf :IdentifiedObject;
+         uml:id "_F8DD8DAC-3545-4660-9CA5-794881CC6591" ;
+         rdfs:comment "The physical space at a particular point in a network." ;
+         rdfs:label "Location" .
+
+
 ### http://iec.ch/TC57/CIM-generic#Measurement
 :Measurement rdf:type owl:Class ;
       rdfs:subClassOf :IdentifiedObject ;
@@ -1749,6 +1786,14 @@ The integer values are from IEC 61968-9 to support revenue metering applications
                  uml:id "_BADE2A18-37F4-49bf-87BC-A087E4D2E4F7" ;
                  rdfs:comment "A ProtectedSwitch is a switching device that can be operated by ProtectionEquipment." ;
                  rdfs:label "ProtectedSwitch" .
+
+
+### http://iec.ch/TC57/CIM-generic#PositionPoint
+:PositionPoint rdf:type owl:Class ;
+              rdfs:subClassOf :IdentifiedObject ;
+              uml:id "_F8DD8DAC-3545-4660-9CA5-794881CC6591" ;
+              rdfs:comment "A point in space defined by the position coordinates." ;
+              rdfs:label "PositionPoint" .
 
 
 ###  http://iec.ch/TC57/CIM-generic#SubGeographicalRegion

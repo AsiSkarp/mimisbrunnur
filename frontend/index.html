@@ -96,10 +96,10 @@
             width: 100%; 
         }
 
-        #ds {
+        /*#ds {
             display: inline-block;
             border: 3px solid #ccc;
-        }
+        }*/
 
     </style>
 </head>
@@ -124,18 +124,14 @@
                     <p id="lang">Language: </p>
                 </div>
                 <div class="catalog-container">
-                    <div class="catalog-datasets" id="ds">
+                    <div class="catalog-datasets" >
                     </div>
-                    <div class="dataset-info" id="ds">
-                        Hello!
-                        This is some text!
+                    <div class="dataset-info" id="d-info">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="sidebar">
-            <h2>Information</h2>
-            <p>Some text..</p>
+        <div class="sidebar" id="s-bar">
         </div>
     </div>
     <script>
@@ -179,17 +175,23 @@
                 var points = [];
                 var markers = [];
                 if (result.records.length > 0) {
-
                     for (let i = 0; i < result.records.length; i++) {
                         const record = result.records[i].get(0).properties;
                         const lat = parseFloat(record.lat);
                         const long = parseFloat(record.long);
                         var point = [lat, long];
-                        var marker = L.marker(point).addTo(map).on('click', markerOnClick);
-                        points.push(point);
-                        markers.push(marker.bindPopup(`Location: ${record['identifiedObject.name']}<br>Address: ${record['location.address']}<br>Coordinates: ${lat}, ${long}<br>URI: ${record['uri']}`));
-                    }
+                        const id = result.records[i].get('n').identity.low;
+                        var marker = L.marker(point).addTo(map);
+                        
+                        marker.on('click', (function(capturedId) {
+                            return function() {
+                                displayStationInfo(capturedId);
+                            }
+                        })(id));
 
+                        points.push(point);
+                        markers.push(marker.bindPopup(`Location: ${record['IdentifiedObject.name']}<br>Address: ${record['Location.address']}<br>Coordinates: ${lat}, ${long}<br>URI: ${record['uri']}`));
+                    }
                     var group = new L.featureGroup(markers);
                     map.fitBounds(group.getBounds());
                     
@@ -203,9 +205,45 @@
             }
         }
 
-        function markerOnClick(e) {
-            console.log(e.target.getPopup().getContent());
-            console.log("I could execute another query from here");
+        async function displayStationInfo(id) {
+            var catDiv = document.querySelector('.sidebar');
+            while (catDiv.firstChild) {
+                catDiv.removeChild(catDiv.firstChild);
+            }
+            
+            var query = 'MATCH (l:Location), (ac:ACLineSegment), p = shortestPath((l)-[r*]-(ac)) WHERE ID(l) = $nodeId AND NONE(rel IN r WHERE TYPE(rel) = "type") RETURN [n in nodes(p)] AS vertices, r';
+            const session = driver.session();
+            try {
+                const { records, summary, keys } = await driver.executeQuery(query, 
+                    { nodeId: id },
+                    { database: 'mimir.db' }
+                );
+                displayLastQuery(query);
+                for (let i = 0; i < records[0].get('vertices').length; i++) {
+                    console.log("Relation");
+                    console.log(records[0].get('r')[i]);
+                    console.log("Nodes");
+                    var props = records[0].get('vertices')[i].properties;
+                    var contDiv = document.createElement('div');
+                    contDiv.style.border = '3px solid #ccc';
+                    contDiv.style.padding = '10px';
+                    for (var key in props) {
+                        var keyDiv = document.createElement('div');
+                        keyDiv.innerHTML = (props[key].includes("://")) 
+                            ? keyDiv.innerHTML = `<b>${key}:</b> <a href='${props[key]}'><b>${props[key]}</b></a>`
+                            : keyDiv.innerHTML = `<b>${key}:</b> ${props[key]}`;
+                        contDiv.appendChild(keyDiv);
+                    }
+                    document.getElementById('s-bar').appendChild(contDiv);
+                }
+                
+            }
+            catch (error) {
+                console.error("Failed to fetch location:", error);
+            } finally {
+                await session.close();
+            }
+
         }
 
         async function updateCatalog() {
@@ -316,11 +354,59 @@
                     { database: 'mimir.db'}
                 );
                 for (record of records) {
-                    
-                    var rel = record.get('r').type;
-                     
-                    console.log(record.get('r').type);
-                    console.log(record.get('n').properties);
+                    var object = record.get('n').properties;
+                    predicate = record.get('r').type;
+
+                    if (predicate == 'distribution' || predicate == 'DISTRIBUTION') {
+
+                        var distributionDiv = document.createElement('div');
+                        distributionDiv.style.border = '3px solid #ccc';
+                        distributionDiv.style.padding = '10px';
+                        var dist = document.createElement('p');
+                        dist.innerHTML = `<b>Distribution:</b>`;
+                        var title = document.createElement('p');
+                        title.innerHTML = `<b>${object.title}</b>`;
+                        distributionDiv.appendChild(title);
+                        var format = document.createElement('p');
+                        format.innerHTML = `<b>Format:</b> ${object.format}`;
+                        distributionDiv.appendChild(format);
+                        var mediaType = document.createElement('p');
+                        mediaType.innerHTML = `<b>Media type:</b> ${object.mediaType}`;
+                        distributionDiv.appendChild(mediaType);
+                        var uri = document.createElement('p');
+                        uri.innerHTML = `<b>URI:</b> <a href='${object.uri}'><b>${object.uri}</b></a>`;
+                        distributionDiv.appendChild(uri);
+                        document.getElementById('d-info').appendChild(distributionDiv);
+                        //document.getElementById('publisher').innerHTML = `Publisher: <b>${record.get('n').properties['label']}</b>`;    
+                    }
+                }
+            }
+            catch (error) {
+                console.error("Failed to fetch dataset:", error);
+            } finally {
+                await session.close();
+            }
+
+            try {
+                var query = 'MATCH (ds:Dataset) WHERE ID(ds) = $nodeID CALL n10s.inference.getRels(ds, "personAssociation", { subRelRel: "SPO"}) YIELD rel, node RETURN type(rel) as relationship_type, node';
+                let session = driver.session();
+                const result = await session.run(query, { nodeID: id });
+
+                for (record of result.records) {
+                    var relationType = record.get('relationship_type');
+                    var personDiv = document.createElement('div');
+                    personDiv.style.border = '3px solid #ccc';
+                    personDiv.style.padding = '10px';
+                    var relation = document.createElement('p');
+                    relation.innerHTML = `<b>${relationType}</b>`;
+                    personDiv.appendChild(relation);
+                    var name = document.createElement('p');
+                    name.innerHTML = `<b>Name:</b> ${record.get('node').properties['name']}`;
+                    personDiv.appendChild(name);
+                    var email = document.createElement('p');
+                    email.innerHTML = `<b>contact:</b> <a href="${record.get('node').properties['mbox']}">${record.get('node').properties['mbox']}</a>`;
+                    personDiv.appendChild(email);
+                    document.getElementById('d-info').appendChild(personDiv);
                 }
                 displayLastQuery(query);
             }
@@ -329,6 +415,7 @@
             } finally {
                 await session.close();
             }
+
         }
         
     </script>
