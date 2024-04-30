@@ -147,6 +147,24 @@
         
         const driver = neo4j.driver(URI, neo4j.auth.basic(user, password));
         const session = driver.session();
+
+        /*var colors = {
+            orange: '#FFA500',
+            blue: '#0000FF',
+            green: '#008000',
+            red: '#FF0000',
+        } */
+        var colors = [
+            '#FFA500',
+            '#0000FF',
+            '#008000',
+            '#FF0000'
+        ];
+
+        var markerOptions = {
+            opacity: 1,
+            radius: 25
+        }
         
         async function main() {
             try {
@@ -175,7 +193,8 @@
                         const long = parseFloat(record.long);
                         var point = [lat, long];
                         const id = result.records[i].get('n').identity.low;
-                        var marker = L.marker(point).addTo(map);
+                        markerOptions.color = colors[i];
+                        var marker = L.circleMarker(point, markerOptions).addTo(map);
                         
                         marker.on('click', (function(capturedId) {
                             return function() {
@@ -228,7 +247,7 @@
                         contDiv.appendChild(keyDiv);
                     }
                     sBarDiv.appendChild(contDiv);
-                    
+
                     for (let id of records[0].get('r')) {
                         if (id.endNodeElementId == elemId) {
                             var relDiv = document.createElement('div');
