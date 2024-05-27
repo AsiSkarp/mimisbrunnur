@@ -21,6 +21,7 @@ services:
       - ./neo4j/conf:/var/lib/neo4j/conf
       - ./neo4j/plugins:/plugins  # Changed from /var/lib/neo4j/plugins to match the correct path
       - ./neo4j/data:/data  # Simplified, the original volume binding seemed incorrect
+      - ./neo4j/import:/var/lib/neo4j/import
     networks:
       - mimirnet
     

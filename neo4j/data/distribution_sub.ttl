@@ -1,4 +1,4 @@
-@prefix : <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+@prefix : <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
@@ -6,13 +6,15 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix sgam: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/sgam#> .
 @prefix mimir: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir#> .
-@base <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+@base <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir#> .
 
-<http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir> rdf:type owl:Ontology .
+#<http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir> rdf:type owl:Ontology .
 
 
 :SCLB rdf:type owl:NamedIndividual ,
                mimir:SCL ;
+      #rdfs:subClassOf sgam:DistributionDomain ;
+      mimir:belongsTo sgam:DistributionDomain ;
       mimir:has :HeaderB ,
                 :SubstationB ,
                 :IEDB_1 ,
@@ -165,8 +167,9 @@
          mimir:ldInst "Relay" ;
          mimir:lnInst "1" ;
          mimir:lnClass "MMXU" ;
-         mimir:doName "PhyHealth" ;
-         rdfs:comment "Link to another dataset will appear here."@en ;
+         mimir:doName "MMXU_2" ;
+         mimir:hasDataSet "file:///measurement2.csv" ;
+         rdfs:comment "MMXU measurement data series"@en ;
          mimir:name "FCDAB_1" ;
          rdfs:label "FCDAB_1" .
 

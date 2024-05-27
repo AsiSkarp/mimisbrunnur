@@ -4,7 +4,8 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix cim:  <http://iec.ch/TC57/CIM-generic#> .
 @prefix uml: <http://langdale.com.au/2005/UML#> .
-@prefix mimir: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir/> .
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix mimir: <http://www.semanticweb.org/asbjorn/ontologies/2024/2/mimir#> .
 @prefix scl: <http://iec.ch/TC57/61850-7-4#> .
 
 @base <http://iec.ch/TC57/CIM-generic#> .
@@ -27,6 +28,8 @@
                           cim:BaseVoltage ;
                     cim:IdentifiedObject.name "Base Voltage 1" ;
                     cim:BaseVoltage.nominalVoltage 110.0 ;
+                    cim:BaseVoltage.VoltageLevel :VoltageLevel1 ;
+                    cim:BaseVoltage.VoltageLevel :VoltageLevel2 ;
                     rdfs:label "Base Voltage 1" .
 
 
@@ -35,7 +38,6 @@
                     cim:IdentifiedObject.name "Terminal 1" ;
                     cim:Terminal.ConnectivityNode  :ConnectivityNode1 ;
                     cim:PowerSystemResource.Measurements  :Analog1 ;
-                    #cim:Terminal.ConnectedTo  mimir:ConnectivityNode1 ;
                     rdfs:label "Terminal 1" .
 
 
@@ -44,18 +46,19 @@
                     cim:IdentifiedObject.name "Terminal 2" ;
                     cim:Terminal.ConnectivityNode  :ConnectivityNode2 ;
                     cim:PowerSystemResource.Measurements  :Analog2 ;
-                    #cim:Terminal.ConnectedTo  mimir:ConnectivityNode2 ;
                     rdfs:label "Terminal 2" .
 
 
 :ConnectivityNode1 rdf:type owl:NamedIndividual ,
                             cim:ConnectivityNode ;
+                    cim:ConnectivityNode.Terminals  :Terminal1 ;
                     cim:IdentifiedObject.name "Connectivity Node 1" ;
                     rdfs:label "Connectivity Node 1" .
 
 
 :ConnectivityNode2 rdf:type owl:NamedIndividual ,
                             cim:ConnectivityNode ;
+                    cim:ConnectivityNode.Terminals  :Terminal2 ;
                     cim:IdentifiedObject.name "Connectivity Node 2" ;
                     rdfs:label "Connectivity Node 2" .
 
@@ -65,10 +68,20 @@
                     cim:IdentifiedObject.name "Measurement 1" ;
                     cim:Measurement.phases "ABC" ;
                     cim:Measurement.unitSymbol "VA" ;
-                    #cim:Measurement.Terminal  :Terminal1 ;
+                    cim:Measurement.Locations :Location1 ;
+                    cim:Measurement.Terminal  :Terminal1 ;
                     uml:id "60c48ecf-5e45-462b-829f-7ab5acaa1512" ;
-                    :connectedSubstation 'SCL1',
                     rdfs:label "Measurement 1" .
+
+
+:Location1 rdf:type owl:NamedIndividual ,
+                           cim:Location ,
+                           geo:SpatialThing ;
+                    cim:IdentifiedObject.name "Gelsted Mark Station" ;
+                    cim:Location.address "Hønnerupvej 48" ;
+                    geo:lat "55.4113570" ;
+                    geo:long "9.9695080" ;
+                    rdfs:label "Location 1" .
 
 
 :Analog2 rdf:type owl:NamedIndividual ,
@@ -76,13 +89,74 @@
                     cim:IdentifiedObject.name "Measurement 2" ;
                     cim:Measurement.phases "ABC" ;
                     cim:Measurement.unitSymbol "VA" ;
-                    #cim:Measurement.Terminal  :Terminal2 ;
+                    cim:Measurement.Locations :Location2 ;
+                    cim:Measurement.Terminal  :Terminal2 ;
                     uml:id "3fb127e0-f19e-483f-9652-61c3162e1bcd" ;
-                    :connectedSubstation 'SCL2',
                     rdfs:label "Measurement 2" .
 
 
+:Location2 rdf:type owl:NamedIndividual ,
+                           cim:Location ,
+                           geo:SpatialThing ;
+                    cim:IdentifiedObject.name "Fraugde Station" ;
+                    cim:Location.address "Stat-Ene-Vej 105B" ;
+                    geo:lat "55.3677290" ;
+                    geo:long "10.5052920" ;
+                    rdfs:label "Location 2" .
 
+
+:Substation1 rdf:type owl:NamedIndividual ,
+                            cim:Substation ;
+                    cim:IdentifiedObject.name "Substation 1" ;
+                    cim:Substation.VoltageLevels  :VoltageLevel1 ;
+                    cim:Substation.Bays  :Bay1 ;
+                    cim:Substation.Location  :Location1 ;
+                    cim:Substation.AdditionalEquipment  :ACLineSegment1 ;
+                    rdfs:label "Substation 1" .
+
+
+:VoltageLevel1 rdf:type owl:NamedIndividual ,
+                            cim:VoltageLevel ;
+                        cim:IdentifiedObject.name "Voltage Level 1" ;
+                        cim:VoltageLevel.BaseVoltage  :BaseVoltage1 ;
+                        cim:VoltageLevel.Substation  :Substation1 ;
+                        cim:VoltageLevel.Bays  :Bay1 ;
+                        rdfs:label "Voltage Level 1" .
+
+:Bay1 rdf:type owl:NamedIndividual ,
+                        cim:Bay ;
+                  cim:IdentifiedObject.name "Bay 1" ;
+                  cim:Bay.VoltageLevel  :VoltageLevel1 ;
+                  cim:Bay.Substation  :Substation1 ;
+                  #cim:Bay.Equipments  :ACLineSegment1 ;
+                  rdfs:label "Bay 1" .         
+
+
+:Substation2 rdf:type owl:NamedIndividual ,
+                            cim:Substation ;
+                    cim:IdentifiedObject.name "Substation 2" ;
+                    cim:Substation.VoltageLevels  :VoltageLevel2 ;
+                    cim:Substation.Bays  :Bay2 ;
+                    cim:Substation.Location  :Location2 ;
+                    cim:Substation.AdditionalEquipment  :ACLineSegment1 ;
+                    rdfs:label "Substation 2" . 
+
+
+:VoltageLevel2 rdf:type owl:NamedIndividual ,
+                            cim:VoltageLevel ;
+                        cim:IdentifiedObject.name "Voltage Level 2" ;
+                        cim:VoltageLevel.BaseVoltage  :BaseVoltage1 ;
+                        cim:VoltageLevel.Substation  :Substation2 ;
+                        cim:VoltageLevel.Bays  :Bay2 ;
+                        rdfs:label "Voltage Level 2" .
+
+
+:Bay2 rdf:type owl:NamedIndividual ,
+                        cim:Bay ;
+                  cim:IdentifiedObject.name "Bay 2" ;
+                  cim:Bay.VoltageLevel  :VoltageLevel2 ;
+                  cim:Bay.Substation  :Substation2 ;
+                  rdfs:label "Bay 2" .
 
 
 

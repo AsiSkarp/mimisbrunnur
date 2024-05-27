@@ -108,6 +108,7 @@
                 <div>
                     <button class="button-bar" id="updateMap" style="font-size: 16px;">Update map</button>
                     <button class="button-bar" id="updateCatalog" style="font-size: 16px;">Update catalog</button>
+                    <!--<button class="button-bar" id="export-catalog" style="font-size: 16px;">Export catalog</button>-->
                     <p class="button-bar" id="last-query"><b>Last query: </b>empty</p>
                 </div>
                 <div class="catalog-info">
@@ -131,6 +132,9 @@
     <script>
         document.getElementById('updateMap').addEventListener('click', updateMap);
         document.getElementById('updateCatalog').addEventListener('click', updateCatalog);
+        //document.getElementById('export-catalog').addEventListener('click', exportCatalog);
+        
+        //document.getElementById('export-graph').addEventListener('click', exportGraph);
 
         var map = L.map('map').setView([55.3682051938, 10.4239533042], 13);
         
@@ -373,15 +377,22 @@
                 dInfoDiv.removeChild(dInfoDiv.firstChild);
             }
             try {
-                var query = 'MATCH (ds:Dataset)-[r]->(n) WHERE ID(ds) = $nodeID RETURN ds, r, n';
+                var query = 'MATCH (ds:Dataset)-[r]->(n:Distribution)-[d]-(p) WHERE ID(ds) = $nodeID RETURN ds, r, n, d, p';
                 const { records, summary, keys } = await driver.executeQuery(
                     query,
                     { nodeID: id },
                     { database: 'mimir.db'}
                 );
                 for (record of records) {
+                    //console.log(record)
                     var object = record.get('n').properties;
                     predicate = record.get('r').type;
+                    var d = record.get('d').properties;
+                    var p = record.get('p').properties;
+                    console.log(predicate);
+                    console.log(object);
+                    console.log(d);
+                    console.log(p);
 
                     if (predicate == 'distribution' || predicate == 'DISTRIBUTION') {
                         var distributionDiv = document.createElement('div');
@@ -438,7 +449,71 @@
             } finally {
                 await session.close();
             }
+        }
 
+        async function exportCatalog() {
+            const endpoint = 'http://localhost:7474/rdf/mimir.db/cypher';
+            const query = 'MATCH (c:Catalog)-[r]->(n) RETURN c, r, n';
+            const headers = {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic' + btoa('neo4j:test')
+            };
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify({ query: query }),
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                const rdfData = await response.text();
+                const blob = new Blob([rdfData], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'catalog.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                displayLastQuery(query);
+                console.log('Exported catalog to catalog.json');
+            } catch (error) {
+                console.error('Failed to export catalog:', error);
+            }
+        }
+
+        async function exportGraph() {
+            const session = driver.session();
+            const query = `:GET /rdf/mimir.db/onto`;
+
+            try {
+                const result = await session.run(query);
+
+                let rdfData = '';
+                result.records.forEach(record => {
+                    rdfData += record.get('rdf') + '\n';
+                });
+
+                const blob = new Blob([rdfData], { type: 'text/turtle' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'graph.ttl';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                displayLastQuery(query);
+                console.log('Exported graph to graph.ttl');
+            } catch (error) {
+                console.error('Failed to export graph:', error);
+            } finally {
+                await session.close();
+
+            }
         }
         
     </script>
